@@ -1,0 +1,34 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: projet              # or use {{ target.schema }} for environment-safe naming
+    loader: bigquery                 # identifies how data is loaded (fivetran, airbyte, etc.)
+    tables:
+      - name: challenger_match
+        identifier: challenger_match
+      - name: diamond_ranked
+        identifier: high_diamond_ranked_10min
+      - name: match_loser
+        identifier: match_loser_data
+      - name: match_winner
+        identifier: match_winner_data
+  
+  - name: raw     
+    schema: projet2              # or use {{ target.schema }} for environment-safe naming
+    loader: bigquery                 # identifies how data is loaded (fivetran, airbyte, etc.)
+    tables:
+      - name: champions
+        identifier: champs
+      - name: matches
+        identifier: matches
+      - name: participants
+        identifier: participants
+      - name: stats1
+        identifier: stats1
+      - name: stats2
+        identifier: stats2
+      - name: teambans
+        identifier: teambans
+      - name: teamstats
+        identifier: teamstats
