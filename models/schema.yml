@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: tables              # or use {{ target.schema }} for environment-safe naming
+    loader: bigquery                 # identifies how data is loaded (fivetran, airbyte, etc.)
+    tables:
+      - name: challenger_match
+        identifier: challenger_match
+      - name: diamond_ranked
+        identifier: high_diamond_ranked_10min
+      - name: match_loser
+        identifier: match_loser_data
+      - name: match_winner
+        identifier: match_winner_data
