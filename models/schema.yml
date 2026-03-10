@@ -1,7 +1,7 @@
 version: 2
 
 sources:
-  - name: raw
+  - name: raw_projet
     schema: projet              # or use {{ target.schema }} for environment-safe naming
     loader: bigquery                 # identifies how data is loaded (fivetran, airbyte, etc.)
     tables:
