@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: raw
-    schema: tables              # or use {{ target.schema }} for environment-safe naming
+    schema: projet              # or use {{ target.schema }} for environment-safe naming
     loader: bigquery                 # identifies how data is loaded (fivetran, airbyte, etc.)
     tables:
       - name: challenger_match
