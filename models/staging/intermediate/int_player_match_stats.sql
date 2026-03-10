@@ -39,31 +39,31 @@ joined AS (
 
         
         s.win,
-        s.kills,
+        s.kills,                                                                        --KDA
         s.deaths,
         s.assists,
         ROUND(SAFE_DIVIDE(s.kills + s.assists, NULLIF(s.deaths, 0)), 2) AS kda,
-        s.totdmgtochamp,
+        s.totdmgtochamp,                                                                --DEGATS
         s.magicdmgtochamp,
         s.physdmgtochamp,
         s.truedmgtochamp,
-        s.totdmgtaken,
+        s.totdmgtaken,                                                                  --TANK
         s.dmgselfmit,
-        s.totheal,
+        s.totheal,                                                                      --HEAL
         s.totunitshealed,
-        s.dmgtoobj,
+        s.dmgtoobj,                                                                     --OBJECTIF
         s.dmgtoturrets,
         s.turretkills,
-        s.totminionskilled,
+        s.totminionskilled,                                                             --FARM
         s.neutralminionskilled,
         s.totminionskilled + s.neutralminionskilled AS total_cs,
-        s.visionscore,
+        s.visionscore,                                                                  --VISION
         s.wardsplaced,
         s.wardskilled,
         s.pinksbought,
-        s.goldearned,
+        s.goldearned,                                                                   --ECO
         s.goldspent,
-        s.totcctimedealt,
+        s.totcctimedealt,                                                               --CC ET DIVERS
         s.champlvl,
         s.firstblood,
         s.longesttimespentliving,
@@ -71,7 +71,7 @@ joined AS (
         s.triplekills,
         s.quadrakills,
         s.pentakills,
-        m.duration AS duration_seconds,
+        m.duration AS duration_seconds,                                                 -- DUREE DU MATCH
         ROUND(m.duration / 60.0, 1) AS duration_minutes
 
     FROM participants p
@@ -82,14 +82,14 @@ joined AS (
 
 SELECT
     *,
-    ROUND(SAFE_DIVIDE(totdmgtochamp, duration_minutes), 1)          AS dmg_to_champs_per_min,
-    ROUND(SAFE_DIVIDE(totdmgtaken, duration_minutes), 1)            AS dmg_taken_per_min,
-    ROUND(SAFE_DIVIDE(totheal, duration_minutes), 1)                AS heal_per_min,
-    ROUND(SAFE_DIVIDE(goldearned, duration_minutes), 1)             AS gold_per_min,
-    ROUND(SAFE_DIVIDE(total_cs, duration_minutes), 1)               AS cs_per_min,
-    ROUND(SAFE_DIVIDE(visionscore, duration_minutes), 2)            AS vision_per_min,
-    ROUND(SAFE_DIVIDE(dmgtoobj, duration_minutes), 1)               AS obj_dmg_per_min,
-    ROUND(SAFE_DIVIDE(dmgtoturrets, duration_minutes), 1)           AS turret_dmg_per_min
+    ROUND(SAFE_DIVIDE(totdmgtochamp, duration_minutes), 1) AS dmg_to_champs_per_min,
+    ROUND(SAFE_DIVIDE(totdmgtaken, duration_minutes), 1)   AS dmg_taken_per_min,
+    ROUND(SAFE_DIVIDE(totheal, duration_minutes), 1)       AS heal_per_min,
+    ROUND(SAFE_DIVIDE(goldearned, duration_minutes), 1)    AS gold_per_min,
+    ROUND(SAFE_DIVIDE(total_cs, duration_minutes), 1)      AS cs_per_min,
+    ROUND(SAFE_DIVIDE(visionscore, duration_minutes), 2)   AS vision_per_min,
+    ROUND(SAFE_DIVIDE(dmgtoobj, duration_minutes), 1)      AS obj_dmg_per_min,
+    ROUND(SAFE_DIVIDE(dmgtoturrets, duration_minutes), 1)  AS turret_dmg_per_min
 
 FROM joined
 
