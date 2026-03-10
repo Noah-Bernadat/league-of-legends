@@ -2,7 +2,7 @@ with
 
 source as (
 
-    select * from {{ source('raw', 'stats1') }}
+    select * from {{ source('raw_v2', 'stats1') }}
 
 ),
 

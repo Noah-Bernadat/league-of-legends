@@ -2,7 +2,7 @@ with
 
 source as (
 
-    select * from {{ source('raw', 'champions') }}
+    select * from {{ source('raw_v2', 'champions') }}
 
 ),
 
