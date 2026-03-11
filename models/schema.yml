@@ -14,7 +14,7 @@ sources:
       - name: match_winner
         identifier: match_winner_data
   
-  - name: raw     
+  - name: raw_v2    
     schema: projet2              # or use {{ target.schema }} for environment-safe naming
     loader: bigquery                 # identifies how data is loaded (fivetran, airbyte, etc.)
     tables:
