@@ -1,3 +1,4 @@
+{{ config(materialized='table') }}
 
 --perfs des champions par role
 

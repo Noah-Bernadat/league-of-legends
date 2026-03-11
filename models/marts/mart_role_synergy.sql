@@ -1,3 +1,7 @@
+{{ config(materialized='table') }}
+
+
+
 WITH team_perf AS (
     SELECT * FROM {{ ref('int_team_role_performance') }}
 ),

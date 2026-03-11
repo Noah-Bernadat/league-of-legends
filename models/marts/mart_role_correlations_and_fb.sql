@@ -1,3 +1,4 @@
+{{ config(materialized='table') }}
 
 --facteur clé de victoire pour chaque role
 

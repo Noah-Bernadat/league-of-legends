@@ -1,3 +1,6 @@
+{{ config(materialized='table') }}
+
+
 
 --comparaison gagnants vs perdants par role
 

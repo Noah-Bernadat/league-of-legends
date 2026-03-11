@@ -1,3 +1,4 @@
+{{ config(materialized='table') }}
 
 --moyenne stats pour chaque role
 
