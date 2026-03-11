@@ -33,3 +33,58 @@ sources:
       - name: teamstats
         identifier: teamstats
 
+models:
+  # ============================================
+  # INTERMEDIATE
+  # ============================================
+  - name: int_player_match_stats
+    description: >
+      Table centrale : 1 ligne = 1 joueur dans 1 match.
+      Jointure participants + stats1/stats2 + matches + champions.
+      Contient le rôle propre (Top/Jungle/Mid/ADC/Support),
+      toutes les stats brutes ET normalisées par minute.
+      ~95.7% des données classifiées (4.3% exclues = rôles ambigus).
+    columns:
+      - name: participant_id
+        tests:
+          - unique
+          - not_null
+      - name: clean_role
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Top', 'Jungle', 'Mid', 'ADC', 'Support']
+
+  # ============================================
+  # MARTS
+  # ============================================
+  - name: mart_role_profiles
+    description: >
+      Profil statistique moyen par rôle (5 lignes).
+      Pour radar chart et table comparative.
+    columns:
+      - name: clean_role
+        tests:
+          - unique
+          - not_null
+
+  - name: mart_role_win_impact
+    description: >
+      Stats moyennes gagnants vs perdants par rôle (10 lignes).
+      Pour bar charts comparatifs montrant l'écart de performance.
+
+  - name: mart_role_win_correlations
+    description: >
+      Corrélations de Pearson entre chaque stat et la victoire, par rôle (5 lignes).
+      Pour heatmap de corrélations.
+    columns:
+      - name: clean_role
+        tests:
+          - unique
+          - not_null
+
+  - name: mart_role_champion_performance
+    description: >
+      Performance des champions par rôle.
+      Filtré sur 30+ games pour significativité statistique.
+      Pour tableau filtrable et scatter plot.
