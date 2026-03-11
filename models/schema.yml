@@ -1,22 +1,12 @@
 version: 2
 
+# ============================================
+# SOURCES
+# ============================================
 sources:
-  - name: raw_projet
-    schema: projet              # or use {{ target.schema }} for environment-safe naming
-    loader: bigquery                 # identifies how data is loaded (fivetran, airbyte, etc.)
-    tables:
-      - name: challenger_match
-        identifier: challenger_match
-      - name: diamond_ranked
-        identifier: high_diamond_ranked_10min
-      - name: match_loser
-        identifier: match_loser_data
-      - name: match_winner
-        identifier: match_winner_data
-  
-  - name: raw     
-    schema: projet2              # or use {{ target.schema }} for environment-safe naming
-    loader: bigquery                 # identifies how data is loaded (fivetran, airbyte, etc.)
+  - name: raw
+    schema: projet2
+    loader: bigquery
     tables:
       - name: champions
         identifier: champs
@@ -32,3 +22,93 @@ sources:
         identifier: teambans
       - name: teamstats
         identifier: teamstats
+
+# ============================================
+# STAGING
+# ============================================
+models:
+  - name: stg_raw__matches
+    description: "Données brutes des matchs (durée, version, plateforme, queue)"
+
+  - name: stg_raw__participants
+    description: "Lien joueur / match / champion / rôle (1 ligne par joueur par match)"
+
+  - name: stg_raw__stats1
+    description: "Stats détaillées des participants (première moitié du dataset)"
+
+  - name: stg_raw__stats2
+    description: "Stats détaillées des participants (seconde moitié du dataset)"
+
+  - name: stg_raw__champions
+    description: "Table de référence : mapping championid → nom du champion"
+
+  - name: stg_raw__teamstats
+    description: "Stats par équipe par match (first blood, first dragon, tours, etc.)"
+
+  - name: stg_raw__teambans
+    description: "Champions bannis par équipe par match"
+
+  # ============================================
+  # INTERMEDIATE
+  # ============================================
+  - name: int_player_match_stats
+    description: >
+      Table centrale du projet : 1 ligne = 1 joueur dans 1 match.
+      Jointure participants + stats1/stats2 + matches + champions.
+      Contient le rôle propre (Top/Jungle/Mid/ADC/Support),
+      toutes les stats brutes ET normalisées par minute.
+
+  - name: int_team_role_performance
+    description: >
+      Pour chaque match et chaque équipe : statut de performance
+      (KDA >= médiane du rôle) de chaque rôle, et nombre total
+      de rôles performants. Base pour les analyses de synergie.
+
+  # ============================================
+  # MARTS — Analyse des rôles
+  # ============================================
+  - name: mart_role_profiles
+    description: >
+      Profil statistique moyen par rôle (5 lignes).
+      Dashboard : radar chart comparatif des 5 rôles.
+
+  - name: mart_role_win_impact
+    description: >
+      Stats moyennes gagnants vs perdants par rôle (10 lignes).
+      Dashboard : bar charts montrant l'écart de performance.
+
+  - name: mart_role_win_correlations
+    description: >
+      Corrélations de Pearson entre chaque stat et la victoire, par rôle (5 lignes).
+      Dashboard : heatmap de corrélations.
+
+  - name: mart_role_champion_performance
+    description: >
+      Performance des champions par rôle (winrate, KDA, dégâts).
+      Filtré sur 30+ games pour significativité statistique.
+
+  - name: mart_role_behind_impact
+    description: >
+      Winrate quand un rôle est en retard (KDA < 1) vs quand il performe.
+      Insight : ADC et Support en retard = game quasi perdue (2-3% WR).
+
+  - name: mart_role_deaths_brackets
+    description: >
+      Winrate par tranche de deaths (0-3, 4-6, 7-9, 10+) et par rôle.
+      Dashboard : line chart montrant le seuil critique.
+
+  - name: mart_role_firstblood_impact
+    description: >
+      Fréquence du first blood par rôle et winrate après FB.
+      Insight : le Jungle valorise légèrement mieux le FB (61.8%).
+
+  - name: mart_team_performing_roles_winrate
+    description: >
+      Winrate selon le nombre de rôles performants (0 à 5).
+      Insight : 0 rôle = 0.3% WR, 5 rôles = 98.4% WR.
+
+  - name: mart_role_pair_synergy
+    description: >
+      Synergie entre chaque paire de rôles (10 paires).
+      Compare winrate quand les deux performent vs un seul vs aucun.
+      Top synergie : Jungle + ADC (+40pts).
