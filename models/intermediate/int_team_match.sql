@@ -17,7 +17,7 @@ participants as (
 ),
 
 stats as (
-    select * from {{ ref('stg_raw__statss') }}
+    select * from {{ ref('stg_raw__stats') }}
 ),
 
 team_player_agg as (
