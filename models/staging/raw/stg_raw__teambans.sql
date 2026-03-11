@@ -1,21 +1,14 @@
-with 
-
-source as (
-
+with source as (
     select * from {{ source('raw', 'teambans') }}
-
 ),
 
-renamed as (
-
+cleaned as (
     select
-        matchid,
-        teamid,
-        championid,
-        banturn,
-
+        matchid         as match_id,
+        teamid          as team_id,
+        championid      as champion_id,
+        banturn         as ban_turn
     from source
-
 )
 
-select * from renamed
+select * from cleaned
