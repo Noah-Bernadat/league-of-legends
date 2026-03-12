@@ -34,11 +34,11 @@ team_roles AS (
         MAX(CASE WHEN clean_role = 'ADC'     THEN is_performing END) AS adc_perf,
         MAX(CASE WHEN clean_role = 'Support' THEN is_performing END) AS support_perf
     FROM with_performance
-    GROUP BY matchid, win                                                               -- pour chaque matchid,win avoir le statut de chaque role et grouper par match&team pour identifier la win
+    GROUP BY match_id, win                                                               -- pour chaque matchid,win avoir le statut de chaque role et grouper par match&team pour identifier la win
 )
 
 SELECT
-    matchid,
+    match_id,
     win,
     COALESCE(top_perf, FALSE)     AS top_perf,
     COALESCE(jungle_perf, FALSE)  AS jungle_perf,
