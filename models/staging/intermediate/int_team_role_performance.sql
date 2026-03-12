@@ -26,7 +26,7 @@ with_performance AS (
 
 team_roles AS (                                                                     
     SELECT
-        matchid,
+        match_id,
         win,
         MAX(CASE WHEN clean_role = 'Top'     THEN is_performing END) AS top_perf,
         MAX(CASE WHEN clean_role = 'Jungle'  THEN is_performing END) AS jungle_perf,
