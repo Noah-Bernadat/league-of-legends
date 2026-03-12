@@ -32,3 +32,5 @@ sources:
         identifier: teambans
       - name: teamstats
         identifier: teamstats
+      - name: all_datas_role_clean
+        identifier : all_datas_role_clean
