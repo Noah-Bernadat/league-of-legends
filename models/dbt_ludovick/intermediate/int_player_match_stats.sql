@@ -2,16 +2,16 @@
 
 
 
-WITH all AS (
-    SELECT * FROM {{ ref('stg_raw__all_datas') }}
+WITH lol_data AS (
+    SELECT * FROM {{ ref('stg_raw__data') }}
 ),
 
 -- Participants sert de pont pour récupérer l'id qui lie aux stats
 participants AS (
     SELECT
-        id AS stats_id,
-        matchid,
-        player
+        participant_id AS stats_id,
+        match_id,
+        player_slot
     FROM {{ ref('stg_raw__participants') }}
 ),
 
@@ -164,11 +164,11 @@ joined AS (
         a.duration_mins,
         ROUND(a.duration_mins * 60) AS duration_seconds
 
-    FROM all a
+    FROM lol_data a
     -- Pont via participants pour trouver le stats_id
     LEFT JOIN participants p
-        ON a.match_id = p.matchid
-        AND a.player_slot = p.player
+        ON a.match_id = p.match_id
+        AND a.player_slot = p.player_slot
     -- Jointure stats via le stats_id du participant
     LEFT JOIN stats_extra s
         ON p.stats_id = s.id

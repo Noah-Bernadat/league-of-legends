@@ -1,35 +1,41 @@
 version: 2
 
-
 # SOURCES
-
 sources:
-  - name: raw    
-    schema: projet2    
-    loader: bigquery                 
+  - name: raw
+    schema: projet2
+    loader: bigquery
+
     tables:
       - name: champions
         identifier: champs
+
       - name: matches
         identifier: matches
+
       - name: participants
         identifier: participants
+
       - name: stats1
         identifier: stats1
+
       - name: stats2
         identifier: stats2
+
       - name: teambans
         identifier: teambans
+
       - name: teamstats
         identifier: teamstats
+
       - name: all_datas_role_clean
-        identifier : all_datas_role_clean
-      - name: all_datas
-        identifier: all_datas
+        identifier: all_datas_role_clean
+
+      - name: data
+        identifier: data
 
 
 # STAGING
-
 models:
   - name: stg_raw__matches
     description: "Données brutes des matchs (durée, version, plateforme, queue)"
@@ -52,9 +58,8 @@ models:
   - name: stg_raw__teambans
     description: "Champions bannis par équipe par match"
 
-  
-  # INTERMEDIATE
-  
+
+# INTERMEDIATE
   - name: int_player_match_stats
     description: >
       Table centrale : 1 ligne = 1 joueur dans 1 match.
@@ -67,9 +72,8 @@ models:
       Chaque rôle marqué comme performant (KDA >= médiane) ou non.
       Base pour les analyses de synergie.
 
-  
-  # MARTS 
-  
+
+# MARTS
   - name: mart_role_profiles
     description: >
       Profil statistique par rôle avec valeurs brutes (avg_) et normalisées 0-100 (norm_).
