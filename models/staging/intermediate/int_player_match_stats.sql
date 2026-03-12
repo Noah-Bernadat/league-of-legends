@@ -1,3 +1,7 @@
+{{ config(materialized='table') }}
+
+
+
 WITH all_datas AS (
     SELECT * FROM {{ ref('stg_raw__all_datas') }}
 ),
