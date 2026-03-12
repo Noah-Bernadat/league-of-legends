@@ -1,13 +1,3 @@
-{{
-    config(
-        materialized = 'table'
-    )
-}}
-
--- Winrate par objectif : pris vs non pris
--- Source : mart_analyse_equipe (pour accéder aux données adversaire : gold, kills)
--- Output : 6 lignes — une par objectif, triées par impact décroissant
--- Colonnes Looker : scorecards WR, delta ranking chart, tableau récap complet
 
 with t as (
     select * from {{ ref('mart_analyse_equipe') }}

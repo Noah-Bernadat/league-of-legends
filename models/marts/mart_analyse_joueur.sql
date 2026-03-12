@@ -1,9 +1,3 @@
-{{
-    config(
-        materialized = 'table'
-    )
-}}
-
 with player_match as (
     select * from {{ ref('int_player_match') }}
 ),

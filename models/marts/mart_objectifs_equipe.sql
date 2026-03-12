@@ -1,9 +1,3 @@
-{{
-    config(
-        materialized = 'table'
-    )
-}}
-
 with equipe as (
     select * from {{ ref('mart_analyse_equipe') }}
 ),
