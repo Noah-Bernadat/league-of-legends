@@ -1,9 +1,9 @@
 with stats1 as (
-    select * from {{ source('raw_v2', 'stats1') }}
+    select * from {{ source('raw', 'stats1') }}
 ),
 
 stats2 as (
-    select * from {{ source('raw_v2', 'stats2') }}
+    select * from {{ source('raw', 'stats2') }}
 ),
 
 unioned as (
