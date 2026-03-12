@@ -4,9 +4,9 @@ version: 2
 # SOURCES
 
 sources:
-  - name: raw
-    schema: projet2
-    loader: bigquery
+  - name: raw    
+    schema: projet2    
+    loader: bigquery                 
     tables:
       - name: champions
         identifier: champs
@@ -22,6 +22,8 @@ sources:
         identifier: teambans
       - name: teamstats
         identifier: teamstats
+      - name: all_datas_role_clean
+        identifier : all_datas_role_clean
       - name: all_datas
         identifier: all_datas
 
