@@ -1,5 +1,8 @@
 version: 2
 
+
+# SOURCES
+
 sources:
   - name: raw    
     schema: projet2    
@@ -21,3 +24,78 @@ sources:
         identifier: teamstats
       - name: all_datas_role_clean
         identifier : all_datas_role_clean
+      - name: all_datas
+        identifier: all_datas
+
+
+# STAGING
+
+models:
+  - name: stg_raw__matches
+    description: "Données brutes des matchs (durée, version, plateforme, queue)"
+
+  - name: stg_raw__participants
+    description: "Lien joueur / match / champion / rôle (1 ligne par joueur par match)"
+
+  - name: stg_raw__stats1
+    description: "Stats détaillées des participants (première moitié du dataset)"
+
+  - name: stg_raw__stats2
+    description: "Stats détaillées des participants (seconde moitié du dataset)"
+
+  - name: stg_raw__champions
+    description: "Table de référence : mapping championid → nom du champion"
+
+  - name: stg_raw__teamstats
+    description: "Stats par équipe par match (first blood, first dragon, tours, etc.)"
+
+  - name: stg_raw__teambans
+    description: "Champions bannis par équipe par match"
+
+  
+  # INTERMEDIATE
+  
+  - name: int_player_match_stats
+    description: >
+      Table centrale : 1 ligne = 1 joueur dans 1 match.
+      Jointure participants + stats + matches + champions.
+      Rôle propre assigné et stats normalisées par minute.
+
+  - name: int_team_role_performance
+    description: >
+      Performance par rôle au niveau équipe.
+      Chaque rôle marqué comme performant (KDA >= médiane) ou non.
+      Base pour les analyses de synergie.
+
+  
+  # MARTS 
+  
+  - name: mart_role_profiles
+    description: >
+      Profil statistique par rôle avec valeurs brutes (avg_) et normalisées 0-100 (norm_).
+      Les colonnes norm_ sont conçues pour le radar chart Looker Studio.
+      5 lignes, une par rôle.
+
+  - name: mart_role_win_analysis
+    description: >
+      Analyse victoire/défaite par rôle. Filtrer par win_type :
+      'win_impact' = gagnants vs perdants,
+      'behind_impact' = KDA < 1 vs normal,
+      'deaths_bracket' = winrate par tranche de deaths (0-3, 4-6, 7-9, 10+).
+
+  - name: mart_role_correlations_and_fb
+    description: >
+      Corrélations stats/victoire et first blood. Filtrer par analysis_type :
+      'correlation' = corrélation de Pearson par rôle,
+      'firstblood' = fréquence et winrate du FB par rôle.
+
+  - name: mart_role_champion_performance
+    description: >
+      Performance des champions par rôle (winrate, KDA, dégâts).
+      Filtré sur 30+ games pour significativité.
+
+  - name: mart_role_synergy
+    description: >
+      Synergie d'équipe. Filtrer par synergy_type :
+      'team_count' = winrate selon nombre de rôles performants (0-5),
+      'pair' = synergie par paire de rôles (4 scénarios chacune).
